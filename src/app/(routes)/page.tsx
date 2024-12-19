@@ -10,15 +10,15 @@ export default async function Home() {
 	if (session) {
 		// Check if the user already has a profile
 		const profile = await prisma.profile.findFirst({
-		  where: {
-			email: session?.user?.email as string, 
-		  },
+			where: {
+				email: session?.user?.email as string,
+			},
 		});
-	
+
 		if (!profile) {
-		  return redirect('/settings');
+			return redirect('/settings');
 		}
-	  }
+	}
 	return (
 		<div className="">
 			{session && (
@@ -72,7 +72,7 @@ export default async function Home() {
 							</button>
 
 						</form>
-				
+
 					</div>
 				</div>
 			)}
