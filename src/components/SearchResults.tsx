@@ -48,7 +48,7 @@ export default async function SearchResults({ query }: { query: string }) {
     return (
         <div className="">
             <h1 className="text-lg mt-4">
-                Search Results for "{query}"
+                Search Results for &quot;{query}&quot;
             </h1>
             {profiles?.length > 0 && (
                 <div className="grid mt-4 grid-cols-2 gap-2">

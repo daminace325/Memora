@@ -35,15 +35,13 @@ export default function ProfilePageInfo({
                 <div className="size-48 p-2 rounded-full bg-gradient-to-tr from-ig-orange to bg-ig-red">
                     <div className="size-44 p-2 bg-white rounded-full">
                         <div className="size-40 aspect-square overflow-hidden rounded-full">
-                            <div className="bg-gray-400 size-24 rounded-full overflow-hidden shadow-md shadow-gray-400">
-                                {profile.avatar ? (
-                                    <img className="h-full w-full object-cover" src={profile.avatar} alt="Avatar" />
-                                ) : (
-                                    <div className="h-full w-full flex items-center justify-center">
-                                        No Image
-                                    </div>
-                                )}
-                            </div>
+                            {profile.avatar ? (
+                                <img className="h-full w-full object-cover" src={profile.avatar} alt="Avatar" />
+                            ) : (
+                                <div className="h-full w-full flex items-center justify-center">
+                                    No Image
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

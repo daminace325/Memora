@@ -17,7 +17,7 @@ export default function BookmarkButton({
     const [bookmarkedByMe, setBookmarkedByMe] = useState(!!sessionBookmark)
     return (
         <form
-            action={async (data: FormData) => {
+            action={async () => {
                 setBookmarkedByMe(prev => !prev)
                 if (bookmarkedByMe) {
                     //remove bookmark
