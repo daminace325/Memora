@@ -1,4 +1,4 @@
-import { Follower, Profile } from "@prisma/client";
+import { Profile } from "@prisma/client";
 import { Avatar } from "@radix-ui/themes";
 import { PlusIcon } from "lucide-react";
 
