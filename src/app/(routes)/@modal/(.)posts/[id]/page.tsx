@@ -3,12 +3,12 @@ import ModalPostContent from "@/components/ModalPostContent";
 import PreLoader from "@/components/PreLoader";
 import { Suspense } from "react";
 
-export default async function PostInModal({ params: { id } }: { params: { id: string } }) {
+export default function PostInModal({ params }: { params: { id: string } }) {
     return (
         <Modal>
             <Suspense fallback={<PreLoader />}>
-                <ModalPostContent postId={id} />
+                <ModalPostContent postId={params.id} />
             </Suspense>
         </Modal>
-    )
+    );
 }
