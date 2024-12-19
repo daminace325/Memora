@@ -48,7 +48,7 @@ export default async function Home() {
 							</span>
 						</div>
 						<p className="text-center text-gray-600 text-lg mb-8">
-							<span>"Connect, Share, and Remember the Moments that Matter."</span>
+							<span>&quot;Connect, Share, and Remember the Moments that Matter.&quot;</span>
 						</p>
 						<form
 							className="flex justify-center"
