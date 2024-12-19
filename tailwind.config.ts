@@ -8,9 +8,12 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        pacifico: ['Pacifico', 'cursive'],  // Add Pacifico font
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        'ig-red': "var(--red)",
+        'ig-orange': "var(--orange)",
       },
     },
   },
