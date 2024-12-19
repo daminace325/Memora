@@ -38,9 +38,9 @@ export default async function Home() {
 			)} */}
 			{!session && (
 				<div className="flex items-center justify-center min-h-screen">
-					<div className="bg-white p-10 rounded-lg border w-full max-w-md ">
-						<div className="text-4xl font-bold flex gap-3">
-							<h2 className="text-gray-800 mb-6">
+					<div className="bg-white p-10 rounded-lg border max-w-md">
+						<div className="text-4xl font-bold flex-col md:flex-row flex items-center gap-3 mb-4">
+							<h2 className="text-gray-800">
 								Welcome to
 							</h2>
 							<span className="font-pacifico text-transparent bg-clip-text bg-gradient-to-r from-ig-orange to-ig-red">
@@ -72,9 +72,7 @@ export default async function Home() {
 							</button>
 
 						</form>
-						{/* <p className="mt-4 text-center text-gray-600 text-sm">
-							By signing in, you agree to our <a href="#" className="text-blue-500">Terms of Service</a> and <a href="#" className="text-blue-500">Privacy Policy</a>.
-						</p> */}
+				
 					</div>
 				</div>
 			)}
