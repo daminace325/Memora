@@ -5,25 +5,30 @@ import SearchResults from "@/components/SearchResults";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+
 export default async function SearchPage({
-    searchParams: { query },
-}: {
-    searchParams: { query: string }
-}) {
-    const session = await auth()
-    if (!session?.user?.email) {
-        return redirect('/');
-    }
-    return (
-        <div className="w-full">
-            <div className="max-w-md mx-auto">
-                <SearchForm />
-                {typeof query !== 'undefined' && (
-                    <Suspense fallback={<PreLoader />}>
-                        <SearchResults query={query} />
-                    </Suspense>
-                )}
-            </div>
-        </div>
-    )
+  searchParams,
+}: {searchParams: Promise<{ query: string }>}) {
+  // If searchParams is a Promise, resolve it
+  const resolvedSearchParams = await searchParams;
+  
+  const { query } = resolvedSearchParams;
+
+  const session = await auth();
+  if (!session?.user?.email) {
+    return redirect('/');
+  }
+
+  return (
+    <div className="w-full">
+      <div className="max-w-md mx-auto">
+        <SearchForm />
+        {typeof query !== 'undefined' && (
+          <Suspense fallback={<PreLoader />}>
+            <SearchResults query={query} />
+          </Suspense>
+        )}
+      </div>
+    </div>
+  );
 }

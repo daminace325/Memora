@@ -7,7 +7,7 @@ export default async function HomeTopRow({
 }: {
     profiles: Profile[];
 }) {
-
+    
     return (
         <div className="flex gap-3 max-w-full lg:justify-center overflow-x-auto">
             <div className="">

@@ -3,10 +3,14 @@ import ProfilePageContent from "@/components/ProfilePageContent"
 import { prisma } from "@/db"
 
 export default async function UserProfilePage({
-    params: {username}
+    params
 }: {
-    params: { username: string }
+    params: Promise<{ username: string }>
 }) {
+    const resolvedParams = await params
+    
+    const { username } = resolvedParams
+
     const sessionEmail = await getSessionEmail() || ''
     const profile = await prisma.profile.findFirstOrThrow({
         where: {
@@ -14,15 +18,15 @@ export default async function UserProfilePage({
         }
     })
     const ourFollow = await prisma.follower.findFirst({
-        where:{
+        where: {
             followingProfileEmail: sessionEmail,
             followedProfileId: profile.id
         }
     })
     return (
-        <ProfilePageContent 
-        isOurProfile={profile.email === sessionEmail}
-        ourFollow={ourFollow}
-        profile={profile} />
+        <ProfilePageContent
+            isOurProfile={profile.email === sessionEmail}
+            ourFollow={ourFollow}
+            profile={profile} />
     )
 }
