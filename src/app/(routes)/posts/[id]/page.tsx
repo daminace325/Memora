@@ -1,10 +1,12 @@
-import { getSinglePostData } from "@/actions";
+import { getSessionEmail, getSinglePostData } from "@/actions";
 import SinglePostContent from "@/components/SinglePostContent";
 
 
-export default async function SinglePostPage({params}: {params: Promise<{ id: string }>;}) {
-    const resolvedParams = await params; 
-    
+export default async function SinglePostPage({ params }: { params: Promise<{ id: string }>; }) {
+    const resolvedParams = await params;
+
+    const sessionEmail = await getSessionEmail() || ''
+
     const {
         post,
         authorProfile,
@@ -22,6 +24,7 @@ export default async function SinglePostPage({params}: {params: Promise<{ id: st
             commentsAuthors={commmentsAuthors}
             myLike={myLike}
             myBookmark={myBookmark}
+            isOurProfile={post.author === sessionEmail}
         />
     );
 }

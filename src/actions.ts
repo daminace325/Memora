@@ -155,6 +155,50 @@ export async function getSinglePostData(postId: string) {
 }
 
 
+export async function deletePost(postId: string) {
+    const sessionEmail = await getSessionEmailOrThrow();
+
+    // Ensure that the session user is the author of the post before deleting
+    const post = await prisma.post.findFirst({
+        where: {
+            id: postId,
+            author: sessionEmail,
+        },
+    });
+
+    if (!post) {
+        throw new Error("Post not found or you are not authorized to delete it.");
+    }
+
+    // Clean up related data before deleting the post
+    await prisma.comment.deleteMany({
+        where: {
+            postId,
+        },
+    });
+
+    await prisma.like.deleteMany({
+        where: {
+            postId,
+        },
+    });
+
+    await prisma.bookmark.deleteMany({
+        where: {
+            postId,
+        },
+    });
+
+    // Finally, delete the post
+    await prisma.post.delete({
+        where: {
+            id: postId,
+        },
+    });
+}
+
+
+
 export async function followProfile(profileIdToFollow: string) {
     const sessionProfile = await prisma.profile.findFirstOrThrow({
         where: {

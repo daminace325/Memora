@@ -4,8 +4,8 @@ import { Suspense } from "react"
 import LikesInfo from "@/components/LikesInfo"
 import { Bookmark, Comment as CommentModel, Like, Post, Profile } from "@prisma/client"
 import BookmarkButton from "./BookmarkButton"
-
-
+import Description from "./Description"
+import DeleteButton from "./DeleteButton"
 
 export default function SinglePostContent({
     post,
@@ -14,6 +14,7 @@ export default function SinglePostContent({
     commentsAuthors,
     myLike,
     myBookmark,
+    isOurProfile
 }: {
     post: Post;
     authorProfile: Profile;
@@ -21,8 +22,8 @@ export default function SinglePostContent({
     commentsAuthors: Profile[];
     myLike: Like | null;
     myBookmark: Bookmark | null;
+    isOurProfile?: boolean;
 }) {
-
     return (
         <div className="w-full">
             <div className="grid md:grid-cols-2 gap-4">
@@ -33,7 +34,11 @@ export default function SinglePostContent({
                         alt={post.description} />
                 </div>
                 <div className="">
-                    <Comment
+                    {/* <Comment
+                        createdAt={post.createdAt}
+                        text={post.description}
+                        authorProfile={authorProfile} /> */}
+                    <Description
                         createdAt={post.createdAt}
                         text={post.description}
                         authorProfile={authorProfile} />
@@ -53,6 +58,12 @@ export default function SinglePostContent({
                             <BookmarkButton
                                 post={post}
                                 sessionBookmark={myBookmark} />
+
+                            {isOurProfile && <DeleteButton
+                                post={post}
+                            />
+                            }
+
                         </div>
                     </div>
                     <div className="pt-8 border-t border-t-gray-300">
