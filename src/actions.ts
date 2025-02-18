@@ -105,17 +105,25 @@ export async function removeLikeFromPost(data: FormData) {
 
 
 export async function getSinglePostData(postId: string) {
-    const post = await prisma.post.findFirstOrThrow({
+    const post = await prisma.post.findFirst({
         where: {
             id: postId
         }
     })
 
-    const authorProfile = await prisma.profile.findFirstOrThrow({
+    if (!post) {
+        return null;
+    }
+
+    const authorProfile = await prisma.profile.findFirst({
         where: {
             email: post.author
         }
     })
+
+    if (!authorProfile) {
+        return null;
+    }
 
     const comments = await prisma.comment.findMany({
         where: {
@@ -126,7 +134,6 @@ export async function getSinglePostData(postId: string) {
     const commmentsAuthors = await prisma.profile.findMany({
         where: {
             email: { in: uniq(comments.map(c => c.author)) },
-
         }
     })
 

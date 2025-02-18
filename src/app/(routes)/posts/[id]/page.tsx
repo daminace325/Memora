@@ -1,11 +1,14 @@
 import { getSessionEmail, getSinglePostData } from "@/actions";
 import SinglePostContent from "@/components/SinglePostContent";
-
+import { redirect } from "next/navigation";
 
 export default async function SinglePostPage({ params }: { params: Promise<{ id: string }>; }) {
     const resolvedParams = await params;
-
-    const sessionEmail = await getSessionEmail() || ''
+    const result = await getSinglePostData(resolvedParams.id);
+    
+    if (!result) {
+        redirect('/profile')
+    }
 
     const {
         post,
@@ -14,7 +17,9 @@ export default async function SinglePostPage({ params }: { params: Promise<{ id:
         commmentsAuthors,
         myLike,
         myBookmark,
-    } = await getSinglePostData(resolvedParams.id);
+    } = result;
+
+    const sessionEmail = await getSessionEmail() || ''
 
     return (
         <SinglePostContent

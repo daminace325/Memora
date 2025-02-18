@@ -3,24 +3,37 @@
 import { deletePost } from '@/actions'
 import { Post } from '@prisma/client'
 import { Trash } from 'lucide-react'
-import { redirect } from 'next/navigation'
-import React from 'react'
+import { useRouter, usePathname } from 'next/navigation'
+import { useState } from 'react'
 
 const DeleteButton = ({
     post
 }: {
     post: Post
 }) => {
+    const router = useRouter()
+    const pathname = usePathname()
+    const [isDeleting, setIsDeleting] = useState(false)
+    
     return (
         <div className='ml-2 flex items-center'>
             <form action={async () => {
-                deletePost(post.id)
-                redirect('/')
+                if (isDeleting) return
+                setIsDeleting(true)
+                
+                try {
+                    await deletePost(post.id)
+                    window.location.href = '/profile'
+                } catch (error) {
+                    console.error('Error deleting post:', error)
+                    setIsDeleting(false)
+                }
             }}>
                 <button
                     type='submit'
+                    disabled={isDeleting}
                 >
-                    <Trash className='text-red-500 ' />
+                    <Trash className={`text-red-500 ${isDeleting ? 'opacity-50' : ''}`} />
                 </button>
             </form>
         </div>
