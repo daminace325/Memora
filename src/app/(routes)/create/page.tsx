@@ -34,8 +34,7 @@ export default function CreatePage() {
             className="max-w-md mx-auto"
             action={async data => {
                 const id = await postEntry(data)
-                router.push(`/posts/${id}`)
-                router.refresh()
+                window.location.href = `/posts/${id}`
             }}>
             <input type="hidden" name="image" value={imageUrl} />
             <div className="flex gap-4 flex-col">

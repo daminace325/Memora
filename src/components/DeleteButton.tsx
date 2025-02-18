@@ -3,6 +3,7 @@
 import { deletePost } from '@/actions'
 import { Post } from '@prisma/client'
 import { Trash } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const DeleteButton = ({
@@ -11,6 +12,7 @@ const DeleteButton = ({
     post: Post
 }) => {
     const [isDeleting, setIsDeleting] = useState(false)
+    const router = useRouter()
     
     return (
         <div className='ml-2 flex items-center'>
@@ -20,7 +22,8 @@ const DeleteButton = ({
                 
                 try {
                     await deletePost(post.id)
-                    window.location.href = '/profile'
+                    router.push('/profile')
+                    router.refresh()
                 } catch (error) {
                     console.error('Error deleting post:', error)
                     setIsDeleting(false)
