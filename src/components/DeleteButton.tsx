@@ -3,7 +3,6 @@
 import { deletePost } from '@/actions'
 import { Post } from '@prisma/client'
 import { Trash } from 'lucide-react'
-import { useRouter, usePathname } from 'next/navigation'
 import { useState } from 'react'
 
 const DeleteButton = ({
@@ -11,8 +10,6 @@ const DeleteButton = ({
 }: {
     post: Post
 }) => {
-    const router = useRouter()
-    const pathname = usePathname()
     const [isDeleting, setIsDeleting] = useState(false)
     
     return (
