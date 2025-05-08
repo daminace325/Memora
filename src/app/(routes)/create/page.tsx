@@ -3,15 +3,14 @@
 import { postEntry } from "@/actions";
 import { Button, TextArea } from "@radix-ui/themes";
 import { CloudUploadIcon, SendIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 export default function CreatePage() {
     const [imageUrl, setImageUrl] = useState('')
     const [file, setFile] = useState<File | null>(null)
     const [isUploading, setIsUploading] = useState(false)
     const fileInRef = useRef<HTMLInputElement>(null)
-    const router = useRouter()
     useEffect(() => {
         if (file) {
             setIsUploading(true)
@@ -41,7 +40,17 @@ export default function CreatePage() {
                 <div>
                     <div className="min-h-64 p-2 bg-gray-400 rounded-md relative">
                         {imageUrl && (
-                            <img src={imageUrl} className="rounded-md" alt="" />
+                            <Image 
+                                src={imageUrl} 
+                                className="rounded-md" 
+                                alt="Uploaded image"
+                                width={500}
+                                height={400}
+                                style={{
+                                    width: '100%',
+                                    height: 'auto'
+                                }}
+                            />
                         )}
                         <div className="absolute inset-0 flex items-center justify-center">
                             <input

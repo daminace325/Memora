@@ -5,6 +5,7 @@ import LikesInfo from "./LikesInfo"
 import { getSessionEmailOrThrow } from "@/actions"
 import Link from "next/link"
 import BookmarkButton from './BookmarkButton'
+import Image from "next/image"
 
 export default async function HomePosts({
     profiles,
@@ -44,9 +45,18 @@ export default async function HomePosts({
                         className=""
                         key={post.id}>
                         <Link href={`/posts/${post.id}`}>
-                            <img
+                            <Image
                                 className="block shadow-sm shadow-black/50 rounded-lg w-full object-cover"
-                                src={post.image} alt="" />
+                                src={post.image}
+                                alt={post.description || "Post image"}
+                                width={500}
+                                height={500}
+                                style={{
+                                    width: '100%',
+                                    height: 'auto',
+                                    maxHeight: '600px'
+                                }}
+                            />
                         </Link>
                         <div className="flex items-center gap-2 mt-3 justify-between">
                             <div className="flex gap-2 items-center">

@@ -6,6 +6,7 @@ import { Bookmark, Comment as CommentModel, Like, Post, Profile } from "@prisma/
 import BookmarkButton from "./BookmarkButton"
 import Description from "./Description"
 import DeleteButton from "./DeleteButton"
+import Image from "next/image"
 
 export default function SinglePostContent({
     post,
@@ -27,11 +28,20 @@ export default function SinglePostContent({
     return (
         <div className="w-full">
             <div className="grid md:grid-cols-2 gap-4">
-                <div className="ml-auto">
-                    <img
-                        className="rounded-lg"
+                <div className="">
+                    <Image
+                        className="rounded-lg w-full"
                         src={post.image}
-                        alt={post.description} />
+                        alt={post.description}
+                        width={500}
+                        height={500}
+                        priority
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            maxWidth: '100%'
+                        }}
+                    />
                 </div>
                 <div className="">
                     {/* <Comment
@@ -58,7 +68,6 @@ export default function SinglePostContent({
                             <BookmarkButton
                                 post={post}
                                 sessionBookmark={myBookmark} />
-
                             {isOurProfile && <DeleteButton
                                 post={post}
                             />

@@ -3,6 +3,7 @@ import BackButton from "./BackButton";
 import Link from "next/link";
 import FollowButton from "./FollowButton";
 import { Follower, Profile } from "@prisma/client";
+import Image from "next/image";
 
 export default function ProfilePageInfo({
     profile,
@@ -36,7 +37,12 @@ export default function ProfilePageInfo({
                     <div className="size-44 p-2 bg-white rounded-full">
                         <div className="size-40 aspect-square overflow-hidden rounded-full">
                             {profile.avatar ? (
-                                <img className="h-full w-full object-cover" src={profile.avatar} alt="Avatar" />
+                                <Image 
+                                    className="h-full w-full object-cover" 
+                                    src={profile.avatar} 
+                                    alt="Avatar"
+                                    width={160}
+                                    height={160} />
                             ) : (
                                 <div className="h-full w-full flex items-center justify-center">
                                     No Image

@@ -5,6 +5,7 @@ import { Button, TextArea, TextField } from "@radix-ui/themes";
 import { CloudUploadIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 export default function SettingsForm({ profile }: { profile: Profile | null }) {
     const router = useRouter()
@@ -40,7 +41,13 @@ export default function SettingsForm({ profile }: { profile: Profile | null }) {
                 <div>
                     <div className="bg-gray-400 size-24 rounded-full overflow-hidden shadow-md shadow-gray-400">
                         {avatarUrl ? (
-                            <img className="h-full w-full object-cover" src={avatarUrl} alt="Avatar" />
+                            <Image 
+                                className="h-full w-full object-cover" 
+                                src={avatarUrl} 
+                                alt="Avatar" 
+                                width={96}
+                                height={96}
+                            />
                         ) : (
                             <div className="h-full w-full flex items-center justify-center text-gray-600">
                                 Upload an Image

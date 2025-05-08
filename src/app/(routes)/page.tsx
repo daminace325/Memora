@@ -2,6 +2,7 @@ import { auth, signIn } from "@/auth";
 import PreLoader from "@/components/PreLoader";
 import UserHome from "@/components/UserHome";
 import { prisma } from "@/db";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -26,16 +27,6 @@ export default async function Home() {
 					<UserHome session={session} />
 				</Suspense>
 			)}
-			{/* {!session && (
-				<form action={async () => {
-					'use server';
-					await signIn('google')
-				}}>
-					<button
-						className="border px-4 py-2 bg-ig-red rounded-lg text-white"
-						type="submit">Login With Google</button>
-				</form>
-			)} */}
 			{!session && (
 				<div className="flex items-center justify-center min-h-screen">
 					<div className="bg-white p-10 rounded-lg border max-w-md">
@@ -62,22 +53,20 @@ export default async function Home() {
 								type="submit"
 							>
 								<span className="flex items-center justify-center space-x-2">
-									<img
+									<Image
 										src="https://w7.pngwing.com/pngs/760/624/png-transparent-google-logo-google-search-advertising-google-company-text-trademark-thumbnail.png"
-										alt="logo"
-										className="w-6 h-6 rounded-full"
+										alt="Google logo"
+										width={24}
+										height={24}
+										className="rounded-full"
 									/>
 									<span>Login with Google</span>
 								</span>
 							</button>
-
 						</form>
-
 					</div>
 				</div>
 			)}
-
-
 		</div>
 	)
 }
