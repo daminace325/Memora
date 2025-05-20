@@ -3,9 +3,17 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: [
-      'turquoise-worldwide-armadillo-75.mypinata.cloud',
-      'w7.pngwing.com'
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'turquoise-worldwide-armadillo-75.mypinata.cloud',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'w7.pngwing.com',
+        pathname: '**',
+      },
     ],
   },
 };

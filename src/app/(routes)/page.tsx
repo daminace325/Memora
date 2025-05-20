@@ -54,7 +54,7 @@ export default async function Home() {
 							>
 								<span className="flex items-center justify-center space-x-2">
 									<Image
-										src="https://w7.pngwing.com/pngs/760/624/png-transparent-google-logo-google-search-advertising-google-company-text-trademark-thumbnail.png"
+										src="/google-logo.webp"
 										alt="Google logo"
 										width={24}
 										height={24}
