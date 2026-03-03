@@ -19,7 +19,7 @@ export default function ProfileNav({
             <div className="flex justify-center gap-4 font-bold">
                 <Link
                     className={postsActive ? "text-gray-800" : "text-gray-400"}
-                    href={isOurProfile ? '/profile' : `/${username}`}>
+                    href={isOurProfile ? '/profile' : `/users/${username}`}>
                     Posts
                 </Link>
                 <Link
