@@ -22,24 +22,32 @@ export default async function HomePosts({
         take: 100
     })
 
-    const likes = await prisma.like.findMany({
-        where: {
-            author: await getSessionEmailOrThrow(),
-            postId: { in: posts.map(p => p.id) },
-        }
-    })
+    const sessionEmail = await getSessionEmailOrThrow()
 
-    const bookmarks = await prisma.bookmark.findMany({
-        where: {
-            author: await getSessionEmailOrThrow(),
-            postId: { in: posts.map(p => p.id) },
-        }
-    })
+    const [likes, bookmarks] = await Promise.all([
+        prisma.like.findMany({
+            where: {
+                author: sessionEmail,
+                postId: { in: posts.map(p => p.id) },
+            }
+        }),
+        prisma.bookmark.findMany({
+            where: {
+                author: sessionEmail,
+                postId: { in: posts.map(p => p.id) },
+            }
+        }),
+    ])
+
+    // Pre-build maps for O(1) lookups in render
+    const profileMap = new Map(profiles.map(p => [p.email, p]))
+    const likeMap = new Map(likes.map(l => [l.postId, l]))
+    const bookmarkMap = new Map(bookmarks.map(b => [b.postId, b]))
 
     return (
         <div className="max-w-md mx-auto flex flex-col gap-16">
             {posts.map(post => {
-                const profile = profiles.find(p => p.email === post.author)
+                const profile = profileMap.get(post.author)
                 return (
                     <div
                         className=""
@@ -74,11 +82,11 @@ export default async function HomePosts({
                             <div className="flex gap-2 items-center">
                                 <LikesInfo
                                     post={post}
-                                    sessionLike={likes.find(like => like.postId === post.id) || null}
+                                    sessionLike={likeMap.get(post.id) || null}
                                     showText={false} />
                                     <BookmarkButton 
                                     post={post} 
-                                    sessionBookmark={bookmarks.find(b => b.postId === post.id) || null} />
+                                    sessionBookmark={bookmarkMap.get(post.id) || null} />
                             </div>
                         </div>
                         <p className="mt-1 text-slate-600">
