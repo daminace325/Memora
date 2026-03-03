@@ -4,6 +4,7 @@ import { auth } from "./auth"
 import { prisma } from "./db"
 import { uniq } from "lodash"
 import { revalidatePath } from "next/cache"
+import { z } from "zod"
 
 export async function getSessionEmail(): Promise<string | null | undefined> {
     const session = await auth()
@@ -19,15 +20,32 @@ export async function getSessionEmailOrThrow(): Promise<string> {
     return userEmail
 }
 
+const profileSchema = z.object({
+    username: z.string()
+        .min(3, 'Username must be at least 3 characters')
+        .max(30, 'Username must be at most 30 characters')
+        .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
+    name: z.string()
+        .min(1, 'Name is required')
+        .max(100, 'Name must be at most 100 characters'),
+    subtitle: z.string().max(150, 'Subtitle must be at most 150 characters').optional().default(''),
+    bio: z.string().max(500, 'Bio must be at most 500 characters').optional().default(''),
+    avatar: z.string().optional().default(''),
+})
+
 export async function updateProfile(data: FormData) {
     const userEmail = await getSessionEmailOrThrow()
-    const newUserInfo = {
-        username: data.get('username') as string,
-        name: data.get('name') as string,
-        subtitle: data.get('subtitle') as string,
-        bio: data.get('bio') as string,
+    const parsed = profileSchema.safeParse({
+        username: (data.get('username') as string)?.trim(),
+        name: (data.get('name') as string)?.trim(),
+        subtitle: (data.get('subtitle') as string)?.trim(),
+        bio: (data.get('bio') as string)?.trim(),
         avatar: data.get('avatar') as string,
+    })
+    if (!parsed.success) {
+        return { error: parsed.error.issues[0].message }
     }
+    const newUserInfo = parsed.data
     await prisma.profile.upsert({
         where: {
             email: userEmail,
@@ -39,6 +57,7 @@ export async function updateProfile(data: FormData) {
         }
     })
     revalidatePath('/')
+    return { error: null }
 }
 
 

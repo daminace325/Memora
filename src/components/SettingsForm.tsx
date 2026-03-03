@@ -13,6 +13,7 @@ export default function SettingsForm({ profile }: { profile: Profile | null }) {
     const [file, setFile] = useState<File | null>(null)
     const [avatarUrl, setAvatarUrl] = useState(profile?.avatar || null)
     const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         if (file) {
@@ -39,7 +40,13 @@ export default function SettingsForm({ profile }: { profile: Profile | null }) {
     }, [file])
     return (
         <form action={async (data: FormData) => {
-            await updateProfile(data)
+            setError(null)
+            const result = await updateProfile(data)
+            if (result.error) {
+                setError(result.error)
+                setTimeout(() => setError(null), 4000)
+                return
+            }
             router.push('/profile')
             router.refresh()
         }}>
@@ -89,6 +96,9 @@ export default function SettingsForm({ profile }: { profile: Profile | null }) {
                 name="username"
                 defaultValue={profile?.username || ''}
                 placeholder="your_username" />
+            {error && (
+                <p className="text-red-500 text-sm mt-1">{error}</p>
+            )}
             <p className="mt-2 font-bold">name</p>
             <TextField.Root
                 name="name"
