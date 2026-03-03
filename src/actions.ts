@@ -3,6 +3,7 @@
 import { auth } from "./auth"
 import { prisma } from "./db"
 import { uniq } from "lodash"
+import { revalidatePath } from "next/cache"
 
 export async function getSessionEmail(): Promise<string | null | undefined> {
     const session = await auth()
@@ -37,6 +38,7 @@ export async function updateProfile(data: FormData) {
             ...newUserInfo
         }
     })
+    revalidatePath('/')
 }
 
 
@@ -55,13 +57,15 @@ export async function postEntry(data: FormData) {
 
 export async function postComment(data: FormData) {
     const authorEmail = await getSessionEmailOrThrow()
-    return prisma.comment.create({
+    const comment = await prisma.comment.create({
         data: {
             author: authorEmail,
             postId: data.get('postId') as string,
             text: data.get('text') as string,
         },
     })
+    revalidatePath('/')
+    return comment
 }
 
 async function updateLikesPostCount(postId: string) {
@@ -89,6 +93,7 @@ export async function likePost(data: FormData) {
         }
     })
     await updateLikesPostCount(postId)
+    revalidatePath('/')
 }
 
 
@@ -101,6 +106,7 @@ export async function removeLikeFromPost(data: FormData) {
         }
     })
     await updateLikesPostCount(postId)
+    revalidatePath('/')
 }
 
 
@@ -192,6 +198,7 @@ export async function deletePost(postId: string) {
             id: postId,
         },
     });
+    revalidatePath('/')
 }
 
 
@@ -209,6 +216,7 @@ export async function followProfile(profileIdToFollow: string) {
             followedProfileId: profileIdToFollow,
         }
     })
+    revalidatePath('/')
 }
 
 
@@ -226,6 +234,7 @@ export async function unfollowProfile(profileIdToFollow: string) {
             followedProfileId: profileIdToFollow  // The profile to unfollow
         }
     });
+    revalidatePath('/')
 }
 
 
@@ -237,6 +246,7 @@ export async function bookmarkPost(postId: string) {
             postId,
         }
     })
+    revalidatePath('/')
 }
 
 
@@ -249,4 +259,5 @@ export async function unbookmarkPost(postId: string) {
             postId,
         }
     })
+    revalidatePath('/')
 }
