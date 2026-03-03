@@ -17,7 +17,7 @@ model Profile {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   email    String  @unique
   avatar   String?
-  username String?
+  username String? @unique
   name     String?
   subtitle String?
   bio      String?
@@ -47,6 +47,8 @@ model Like {
   postId    String   @db.ObjectId
   author    String
   createdAt DateTime @default(now())
+
+  @@unique([postId, author])
 }
 
 model Bookmark {
@@ -54,6 +56,8 @@ model Bookmark {
   postId    String   @db.ObjectId
   author    String
   createdAt DateTime @default(now())
+
+  @@unique([postId, author])
 }
 
 model Follower {
@@ -62,4 +66,6 @@ model Follower {
   followingProfileId    String   @db.ObjectId
   followedProfileId     String   @db.ObjectId
   createdAt             DateTime @default(now())
+
+  @@unique([followingProfileId, followedProfileId])
 }
