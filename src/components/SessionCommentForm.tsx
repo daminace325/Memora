@@ -4,11 +4,17 @@ import CommentForm from "./CommentForm";
 
 export default async function SessionCommentForm({postId}: {postId: string}) {
     const session = await auth()
-    const profile = await prisma.profile.findFirstOrThrow({
+    if (!session?.user?.email) {
+        return null;
+    }
+    const profile = await prisma.profile.findFirst({
         where: {
-            email: session?.user?.email as string
+            email: session.user.email
         }
     })
+    if (!profile) {
+        return null;
+    }
 
     return (
     <CommentForm postId={postId} avatar={profile.avatar || ''} />
