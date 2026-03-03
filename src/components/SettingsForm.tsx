@@ -96,20 +96,22 @@ export default function SettingsForm({ profile }: { profile: Profile | null }) {
                 name="username"
                 defaultValue={profile?.username || ''}
                 placeholder="your_username" />
-            {error && (
-                <p className="text-red-500 text-sm mt-1">{error}</p>
-            )}
+            <div className="h-2 mt-1">
+                {error && (
+                    <p className="text-red-500 text-sm">{error}</p>
+                )}
+            </div>
             <p className="mt-2 font-bold">name</p>
             <TextField.Root
                 name="name"
                 defaultValue={profile?.name || ''}
                 placeholder="your_name" />
-            <p className="mt-2 font-bold">subtitle</p>
+            <p className="mt-4 font-bold">subtitle</p>
             <TextField.Root
                 name="subtitle"
                 defaultValue={profile?.subtitle || ''}
                 placeholder="profession that describes you" />
-            <p className="mt-2 font-bold">bio</p>
+            <p className="mt-4 font-bold">bio</p>
             <TextArea name="bio" defaultValue={profile?.bio || ''} />
 
             <div className="mt-4 flex justify-center">
