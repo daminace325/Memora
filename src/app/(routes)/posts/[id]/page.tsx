@@ -14,7 +14,7 @@ export default async function SinglePostPage({ params }: { params: Promise<{ id:
         post,
         authorProfile,
         comments,
-        commmentsAuthors,
+        commentsAuthors,
         myLike,
         myBookmark,
     } = result;
@@ -26,7 +26,7 @@ export default async function SinglePostPage({ params }: { params: Promise<{ id:
             post={post}
             authorProfile={authorProfile}
             comments={comments}
-            commentsAuthors={commmentsAuthors}
+            commentsAuthors={commentsAuthors}
             myLike={myLike}
             myBookmark={myBookmark}
             isOurProfile={post.author === sessionEmail}

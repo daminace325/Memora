@@ -11,7 +11,7 @@ export default async function ModalPostContent({ postId }: { postId: string }) {
     
     const {
         post, authorProfile, comments,
-        commmentsAuthors, myLike, myBookmark
+        commentsAuthors, myLike, myBookmark
     } = result
     
     const sessionEmail = await getSessionEmail()
@@ -21,7 +21,7 @@ export default async function ModalPostContent({ postId }: { postId: string }) {
             post={post}
             authorProfile={authorProfile}
             comments={comments}
-            commentsAuthors={commmentsAuthors}
+            commentsAuthors={commentsAuthors}
             myLike={myLike}
             myBookmark={myBookmark}
             isOurProfile={post.author === sessionEmail}

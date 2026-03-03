@@ -131,7 +131,7 @@ export async function getSinglePostData(postId: string) {
         }
     })
 
-    const commmentsAuthors = await prisma.profile.findMany({
+    const commentsAuthors = await prisma.profile.findMany({
         where: {
             email: { in: uniq(comments.map(c => c.author)) },
         }
@@ -155,7 +155,7 @@ export async function getSinglePostData(postId: string) {
         post, 
         authorProfile, 
         comments,
-        commmentsAuthors, 
+        commentsAuthors, 
         myLike, 
         myBookmark
     }
