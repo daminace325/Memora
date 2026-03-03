@@ -1,7 +1,7 @@
 'use client'
 
 import { bookmarkPost, unbookmarkPost } from "@/actions";
-import { Like, Post } from "@prisma/client";
+import { Bookmark, Post } from "@prisma/client";
 import { BookmarkIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,7 +11,7 @@ export default function BookmarkButton({
     sessionBookmark
 }: {
     post: Post,
-    sessionBookmark: Like | null
+    sessionBookmark: Bookmark | null
 }) {
     const router = useRouter()
     const [bookmarkedByMe, setBookmarkedByMe] = useState(!!sessionBookmark)
