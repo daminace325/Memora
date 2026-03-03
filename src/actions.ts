@@ -44,10 +44,14 @@ export async function updateProfile(data: FormData) {
 
 export async function postEntry(data: FormData) {
     const sessionEmail = await getSessionEmailOrThrow()
+    const image = data.get('image') as string
+    if (!image) {
+        throw new Error('Image is required')
+    }
     const postDoc = await prisma.post.create({
         data: {
             author: sessionEmail,
-            image: data.get('image') as string,
+            image,
             description: data.get('description') as string || '',
         }
     })
