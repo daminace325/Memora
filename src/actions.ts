@@ -106,30 +106,34 @@ export async function removeLikeFromPost(data: FormData) {
 
 export async function getSinglePostData(postId: string) {
     const post = await prisma.post.findFirst({
-        where: {
-            id: postId
-        }
+        where: { id: postId }
     })
 
     if (!post) {
         return null;
     }
 
-    const authorProfile = await prisma.profile.findFirst({
-        where: {
-            email: post.author
-        }
-    })
+    const sessionEmail = await getSessionEmailOrThrow();
+
+    // Run independent queries in parallel
+    const [authorProfile, comments, myLike, myBookmark] = await Promise.all([
+        prisma.profile.findFirst({
+            where: { email: post.author }
+        }),
+        prisma.comment.findMany({
+            where: { postId: post.id }
+        }),
+        prisma.like.findFirst({
+            where: { author: sessionEmail, postId: post.id }
+        }),
+        prisma.bookmark.findFirst({
+            where: { author: sessionEmail, postId: post.id }
+        }),
+    ]);
 
     if (!authorProfile) {
         return null;
     }
-
-    const comments = await prisma.comment.findMany({
-        where: {
-            postId: post.id
-        }
-    })
 
     const commentsAuthors = await prisma.profile.findMany({
         where: {
@@ -137,26 +141,12 @@ export async function getSinglePostData(postId: string) {
         }
     })
 
-    const myLike = await prisma.like.findFirst({
-        where: {
-            author: await getSessionEmailOrThrow(),
-            postId: post.id,
-        }
-    })
-
-    const myBookmark = await prisma.bookmark.findFirst({
-        where: {
-            author: await getSessionEmailOrThrow(),
-            postId: post.id,
-        }
-    })
-
     return {
-        post, 
-        authorProfile, 
+        post,
+        authorProfile,
         comments,
-        commentsAuthors, 
-        myLike, 
+        commentsAuthors,
+        myLike,
         myBookmark
     }
 }
