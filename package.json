@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate" 
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.0.1",
@@ -18,7 +18,7 @@
     "lucide-react": "^0.468.0",
     "next": "^15.1.2",
     "next-auth": "^5.0.0-beta.25",
-    "pinata": "^1.9.1",
+    "pinata": "^1.10.1",
     "prisma": "^6.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
