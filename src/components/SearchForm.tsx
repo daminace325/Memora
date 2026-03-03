@@ -8,7 +8,7 @@ export default function SearchForm(){
     const router = useRouter()
     return(
         <form action={async data => {
-            router.push('/search?query=' + data.get('query'))
+            router.push('/search?query=' + encodeURIComponent(data.get('query') as string))
             router.refresh()
         }}>
             <TextField.Root 
