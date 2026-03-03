@@ -23,10 +23,17 @@ export default function SettingsForm({ profile }: { profile: Profile | null }) {
                 method: "POST",
                 body: data,
             }).then(response => {
-                response.json().then(url => {
-                    setIsUploadingAvatar(false)
-                    setAvatarUrl(url)
-                })
+                if (!response.ok) {
+                    throw new Error('Upload failed')
+                }
+                return response.json()
+            }).then(url => {
+                setAvatarUrl(url)
+            }).catch(err => {
+                console.error(err)
+                alert('Failed to upload avatar. Please try again.')
+            }).finally(() => {
+                setIsUploadingAvatar(false)
             })
         }
     }, [file])

@@ -20,10 +20,17 @@ export default function CreatePage() {
                 method: "POST",
                 body: data,
             }).then(response => {
-                response.json().then(url => {
-                    setImageUrl(url)
-                    setIsUploading(false)
-                })
+                if (!response.ok) {
+                    throw new Error('Upload failed')
+                }
+                return response.json()
+            }).then(url => {
+                setImageUrl(url)
+            }).catch(err => {
+                console.error(err)
+                alert('Failed to upload image. Please try again.')
+            }).finally(() => {
+                setIsUploading(false)
             })
         }
     }, [file])
