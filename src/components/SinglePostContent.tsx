@@ -28,9 +28,9 @@ export default function SinglePostContent({
     return (
         <div className="w-full">
             <div className="grid md:grid-cols-2 gap-4">
-                <div className="">
+                <div className="ml-auto">
                     <Image
-                        className="rounded-lg w-full"
+                        className="rounded-lg"
                         src={post.image}
                         alt={post.description}
                         width={500}
@@ -38,8 +38,7 @@ export default function SinglePostContent({
                         priority
                         style={{
                             width: '100%',
-                            height: 'auto',
-                            maxWidth: '100%'
+                            height: 'auto'
                         }}
                     />
                 </div>
@@ -68,6 +67,7 @@ export default function SinglePostContent({
                             <BookmarkButton
                                 post={post}
                                 sessionBookmark={myBookmark} />
+
                             {isOurProfile && <DeleteButton
                                 post={post}
                             />
