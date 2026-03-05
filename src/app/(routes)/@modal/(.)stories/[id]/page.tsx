@@ -1,3 +1,4 @@
+import { getSessionEmail } from "@/actions"
 import StoryViewer from "@/components/StoryViewer"
 import { prisma } from "@/db"
 import { notFound } from "next/navigation"
@@ -21,5 +22,8 @@ export default async function StoryInModal({ params }: { params: Promise<{ id: s
         return notFound()
     }
 
-    return <StoryViewer story={story} authorProfile={authorProfile} />
+    const sessionEmail = await getSessionEmail()
+    const isOwner = sessionEmail === story.author
+
+    return <StoryViewer story={story} authorProfile={authorProfile} isOwner={isOwner} />
 }

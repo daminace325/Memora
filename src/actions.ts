@@ -314,3 +314,26 @@ export async function createStory(data: FormData) {
     revalidatePath('/')
     return { error: null, storyId: story.id }
 }
+
+export async function deleteStory(storyId: string) {
+    const sessionEmail = await getSessionEmailOrThrow();
+
+    const story = await prisma.story.findFirst({
+        where: {
+            id: storyId,
+            author: sessionEmail,
+        },
+    });
+
+    if (!story) {
+        throw new Error("Story not found or you are not authorized to delete it.");
+    }
+
+    await prisma.story.delete({
+        where: {
+            id: storyId,
+        },
+    });
+
+    revalidatePath('/');
+}

@@ -2,23 +2,27 @@
 
 import { Profile, Story } from "@prisma/client"
 import { Avatar } from "@radix-ui/themes"
-import { XIcon } from "lucide-react"
+import { Trash, XIcon } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { formatDistanceToNow } from "date-fns"
+import { deleteStory } from "@/actions"
 
 const STORY_DURATION = 5000 // 5 seconds auto-close
 
 export default function StoryViewer({
     story,
     authorProfile,
+    isOwner = false,
 }: {
     story: Story
     authorProfile: Profile
+    isOwner?: boolean
 }) {
     const router = useRouter()
     const [progress, setProgress] = useState(0)
+    const [isDeleting, setIsDeleting] = useState(false)
     const hasClosedRef = useRef(false)
 
     const closeStory = useCallback(() => {
@@ -83,11 +87,32 @@ export default function StoryViewer({
                             {formatDistanceToNow(new Date(story.createdAt), { addSuffix: true })}
                         </span>
                     </div>
-                    <button
-                        onClick={closeStory}
-                        className="text-white hover:text-white/80 transition">
-                        <XIcon size={24} />
-                    </button>
+                    <div className="flex items-center gap-3">
+                        {isOwner && (
+                            <button
+                                onClick={async (e) => {
+                                    e.stopPropagation()
+                                    if (isDeleting) return
+                                    setIsDeleting(true)
+                                    try {
+                                        await deleteStory(story.id)
+                                        closeStory()
+                                    } catch (error) {
+                                        console.error('Error deleting story:', error)
+                                        setIsDeleting(false)
+                                    }
+                                }}
+                                disabled={isDeleting}
+                                className="text-red-400 hover:text-red-300 transition">
+                                <Trash size={20} className={isDeleting ? 'opacity-50' : ''} />
+                            </button>
+                        )}
+                        <button
+                            onClick={closeStory}
+                            className="text-white hover:text-white/80 transition">
+                            <XIcon size={24} />
+                        </button>
+                    </div>
                 </div>
 
                 {/* Story image */}
