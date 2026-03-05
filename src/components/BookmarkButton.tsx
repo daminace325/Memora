@@ -3,7 +3,6 @@
 import { bookmarkPost, unbookmarkPost } from "@/actions";
 import { Bookmark, Post } from "@prisma/client";
 import { BookmarkIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function BookmarkButton({
@@ -13,7 +12,6 @@ export default function BookmarkButton({
     post: Post,
     sessionBookmark: Bookmark | null
 }) {
-    const router = useRouter()
     const [bookmarkedByMe, setBookmarkedByMe] = useState(!!sessionBookmark)
     return (
         <form
@@ -26,7 +24,6 @@ export default function BookmarkButton({
                     //add bookmark
                     await bookmarkPost(post.id)
                 }
-                router.refresh()
             }}
             className="flex items-center gap-2">
             <input type="hidden" name="postId" value={post.id} />

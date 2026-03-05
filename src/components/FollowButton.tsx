@@ -3,7 +3,6 @@
 import { followProfile, unfollowProfile } from "@/actions";
 import { Follower } from "@prisma/client";
 import { UserMinusIcon, UserPlusIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function FollowButton({
@@ -13,7 +12,6 @@ export default function FollowButton({
     profileIdToFollow: string;
     ourFollow: Follower | null;
 }) {
-    const router = useRouter()
     const [isFollowed, setIsFollowed] = useState<boolean>(!!ourFollow)
     return (
         <form action={async () => {
@@ -25,7 +23,6 @@ export default function FollowButton({
                 //follow
                 await followProfile(profileIdToFollow)
             }
-            router.refresh()
         }}>
             <button
                 className={

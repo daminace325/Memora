@@ -3,7 +3,6 @@
 import { likePost, removeLikeFromPost } from "@/actions";
 import { Like, Post } from "@prisma/client";
 import { HeartIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LikesInfo({
@@ -15,7 +14,6 @@ export default function LikesInfo({
     sessionLike: Like | null,
     showText?: boolean
 }) {
-    const router = useRouter()
     const [likedByMe, setLikedByMe] = useState(!!sessionLike)
     const [isPending, setIsPending] = useState(false)
     return (
@@ -30,7 +28,6 @@ export default function LikesInfo({
                     } else {
                         await likePost(data)
                     }
-                    router.refresh()
                 } finally {
                     setIsPending(false)
                 }
