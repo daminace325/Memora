@@ -141,6 +141,10 @@ export async function removeLikeFromPost(data: FormData) {
 
 
 export async function getSinglePostData(postId: string) {
+    if (!/^[0-9a-fA-F]{24}$/.test(postId)) {
+        return null
+    }
+
     const post = await prisma.post.findFirst({
         where: { id: postId }
     })
