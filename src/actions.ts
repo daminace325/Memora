@@ -30,7 +30,10 @@ const profileSchema = z.object({
         .max(100, 'Name must be at most 100 characters'),
     subtitle: z.string().max(150, 'Subtitle must be at most 150 characters').optional().default(''),
     bio: z.string().max(500, 'Bio must be at most 500 characters').optional().default(''),
-    avatar: z.string().optional().default('/no-user.jpg'),
+    avatar: z.preprocess(
+        (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
+        z.string().optional().default('/no-user.jpg')
+    ),
 })
 
 export async function updateProfile(data: FormData) {
