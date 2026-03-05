@@ -23,27 +23,29 @@ export default async function SearchResults({ query }: { query: string }) {
         },
     });
     
-    const profiles = await prisma.profile.findMany({
-        where: {
-            AND: [
-                {
-                    OR: [
-                        { username: { contains: query } },
-                        { name: { contains: query } },
-                    ],
-                },
-                { username: { not: profile?.username } },
-            ],
-        },
-        take: 10,
-    });
-    
-    const posts = await prisma.post.findMany({
-        where: {
-            description: { contains: query },
-        },
-        take: 100,
-    })
+    // Profile and post searches are independent — fetch in parallel
+    const [profiles, posts] = await Promise.all([
+        prisma.profile.findMany({
+            where: {
+                AND: [
+                    {
+                        OR: [
+                            { username: { contains: query } },
+                            { name: { contains: query } },
+                        ],
+                    },
+                    { username: { not: profile?.username } },
+                ],
+            },
+            take: 10,
+        }),
+        prisma.post.findMany({
+            where: {
+                description: { contains: query },
+            },
+            take: 100,
+        }),
+    ])
 
     return (
         <div className="">

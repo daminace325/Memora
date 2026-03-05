@@ -8,19 +8,17 @@ import { redirect } from "next/navigation"
 
 export default async function BookmarkedPage() {
     const session = await auth()
-    const profile = await prisma.profile.findFirst({
-        where: {
-            email: session?.user?.email as string
-        }
-    })
+    const email = session?.user?.email as string
+
+    // Profile and bookmarks are independent — fetch in parallel
+    const [profile, bookmarks] = await Promise.all([
+        prisma.profile.findFirst({ where: { email } }),
+        prisma.bookmark.findMany({ where: { author: email } }),
+    ])
+
     if (!profile) {
         return redirect('/settings')
     }
-    const bookmarks = await prisma.bookmark.findMany({
-        where: {
-            author: session?.user?.email as string
-        }
-    })
 
     const posts = await prisma.post.findMany({
         where: {

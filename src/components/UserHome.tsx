@@ -7,11 +7,15 @@ import HomePosts from "./HomePosts";
 export default async function UserHome({ session }: { session: Session }) {
     const sessionEmail = session?.user?.email || ''
 
-    const follows = await prisma.follower.findMany({
-        where: {
-            followingProfileEmail: sessionEmail,
-        }
-    })
+    // Fetch follows and own profile in parallel (both only need sessionEmail)
+    const [follows, myProfile] = await Promise.all([
+        prisma.follower.findMany({
+            where: { followingProfileEmail: sessionEmail }
+        }),
+        prisma.profile.findFirst({
+            where: { email: sessionEmail }
+        }),
+    ])
 
     const profiles = await prisma.profile.findMany({
         where: {
@@ -19,19 +23,14 @@ export default async function UserHome({ session }: { session: Session }) {
         }
     })
 
-    // Fetch current user's profile and active stories in parallel
-    const [myProfile, activeStories] = await Promise.all([
-        prisma.profile.findFirst({
-            where: { email: sessionEmail }
-        }),
-        prisma.story.findMany({
-            where: {
-                author: { in: [sessionEmail, ...profiles.map(p => p.email)] },
-                expiresAt: { gt: new Date() },
-            },
-            orderBy: { createdAt: 'desc' },
-        }),
-    ])
+    // Fetch active stories (depends on profiles list)
+    const activeStories = await prisma.story.findMany({
+        where: {
+            author: { in: [sessionEmail, ...profiles.map(p => p.email)] },
+            expiresAt: { gt: new Date() },
+        },
+        orderBy: { createdAt: 'desc' },
+    })
 
     return (
         <div className="flex flex-col gap-8">

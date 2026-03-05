@@ -6,9 +6,11 @@ import { notFound } from "next/navigation"
 export default async function StoryPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
 
-    const story = await prisma.story.findFirst({
-        where: { id },
-    })
+    // Fetch story and session email in parallel
+    const [story, sessionEmail] = await Promise.all([
+        prisma.story.findFirst({ where: { id } }),
+        getSessionEmail(),
+    ])
 
     if (!story) {
         return notFound()
@@ -22,7 +24,6 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
         return notFound()
     }
 
-    const sessionEmail = await getSessionEmail()
     const isOwner = sessionEmail === story.author
 
     return <StoryViewer story={story} authorProfile={authorProfile} isOwner={isOwner} />

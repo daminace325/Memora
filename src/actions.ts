@@ -201,30 +201,16 @@ export async function deletePost(postId: string) {
         throw new Error("Post not found or you are not authorized to delete it.");
     }
 
-    // Clean up related data before deleting the post
-    await prisma.comment.deleteMany({
-        where: {
-            postId,
-        },
-    });
+    // Clean up related data in parallel before deleting the post
+    await Promise.all([
+        prisma.comment.deleteMany({ where: { postId } }),
+        prisma.like.deleteMany({ where: { postId } }),
+        prisma.bookmark.deleteMany({ where: { postId } }),
+    ]);
 
-    await prisma.like.deleteMany({
-        where: {
-            postId,
-        },
-    });
-
-    await prisma.bookmark.deleteMany({
-        where: {
-            postId,
-        },
-    });
-
-    // Finally, delete the post
+    // Now delete the post itself
     await prisma.post.delete({
-        where: {
-            id: postId,
-        },
+        where: { id: postId },
     });
     revalidatePath('/')
 }

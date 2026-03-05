@@ -7,25 +7,23 @@ import { redirect } from "next/navigation"
 
 export default async function HighlightsPage() {
     const session = await auth()
-    const profile = await prisma.profile.findFirst({
-        where: {
-            email: session?.user?.email as string
-        }
-    })
+    const email = session?.user?.email as string
+
+    // Profile and highlights are independent — fetch in parallel
+    const [profile, highlights] = await Promise.all([
+        prisma.profile.findFirst({ where: { email } }),
+        prisma.story.findMany({
+            where: {
+                author: email,
+                expiresAt: { lte: new Date() },
+            },
+            orderBy: { createdAt: 'desc' },
+        }),
+    ])
+
     if (!profile) {
         return redirect('/settings')
     }
-
-    // Expired stories become highlights
-    const highlights = await prisma.story.findMany({
-        where: {
-            author: session?.user?.email as string,
-            expiresAt: { lte: new Date() },
-        },
-        orderBy: {
-            createdAt: 'desc',
-        }
-    })
 
     return (
         <div className="">
