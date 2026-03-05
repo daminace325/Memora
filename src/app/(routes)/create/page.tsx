@@ -84,7 +84,7 @@ export default function CreatePage() {
                 </div>
             </div>
             <div className="flex mt-4 justify-center">
-                <Button>
+                <Button disabled={!imageUrl || isUploading}>
                     <SendIcon size={16} />
                     Publish
                 </Button>

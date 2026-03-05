@@ -22,11 +22,13 @@ export default function ProfileNav({
                     href={isOurProfile ? '/profile' : `/users/${username}`}>
                     Posts
                 </Link>
-                <Link
-                    className={highlightsActive ? "text-gray-800" : "text-gray-400"}
-                    href={'/highlights'}>
-                    Highlights
-                </Link>
+                {isOurProfile && (
+                    <Link
+                        className={highlightsActive ? "text-gray-800" : "text-gray-400"}
+                        href={'/profile/highlights'}>
+                        Highlights
+                    </Link>
+                )}
                 {isOurProfile && (
                     <Link
                         className={bookmarkedActive ? "text-gray-800" : "text-gray-400"}

@@ -6,7 +6,7 @@ export default async function ModalPostContent({ postId }: { postId: string }) {
     const result = await getSinglePostData(postId)
     
     if (!result) {
-        redirect('/profile')
+        return null
     }
     
     const {

@@ -53,18 +53,14 @@ export default async function HomePosts({
                         className=""
                         key={post.id}>
                         <Link href={`/posts/${post.id}`}>
-                            <Image
-                                className="block shadow-sm shadow-black/50 rounded-lg w-full object-cover"
-                                src={post.image}
-                                alt={post.description || "Post image"}
-                                width={500}
-                                height={500}
-                                style={{
-                                    width: '100%',
-                                    height: 'auto',
-                                    maxHeight: '600px'
-                                }}
-                            />
+                            <div className="w-full relative min-h-[350px] max-h-[600px] aspect-square bg-black">
+                                <Image
+                                    src={post.image}
+                                    alt={post.description || "Post image"}
+                                    fill
+                                    className="rounded-lg shadow-sm shadow-black/50 object-contain"
+                                />
+                            </div>
                         </Link>
                         <div className="flex items-center gap-2 mt-3 justify-between">
                             <div className="flex gap-2 items-center">
@@ -84,8 +80,8 @@ export default async function HomePosts({
                                     post={post}
                                     sessionLike={likeMap.get(post.id) || null}
                                     showText={false} />
-                                    <BookmarkButton 
-                                    post={post} 
+                                <BookmarkButton
+                                    post={post}
                                     sessionBookmark={bookmarkMap.get(post.id) || null} />
                             </div>
                         </div>

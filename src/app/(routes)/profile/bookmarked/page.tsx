@@ -37,7 +37,13 @@ export default async function BookmarkedPage() {
                 username={profile.username || ''}
                 isOurProfile={true} />
             <div className="mt-4">
-                <PostsGrid posts={posts} />
+                {posts.length === 0 ? (
+                    <div className="text-center text-gray-400 py-12">
+                        <p className="text-lg">No bookmarks yet</p>
+                    </div>
+                ) : (
+                    <PostsGrid posts={posts} />
+                )}
             </div>
         </div>
     )

@@ -7,6 +7,7 @@ import MobileNav from "@/components/MobileNav";
 import DesktopNav from "@/components/DesktopNav";
 import React from "react";
 import { auth } from "@/auth";
+import { prisma } from "@/db";
 
 
 const geistSans = Geist({
@@ -33,13 +34,18 @@ export default async function RootLayout({
 }>) {
 	const session = await auth()
 	const isLoggedIn = !!session
+	const hasProfile = isLoggedIn
+		? !!(await prisma.profile.findFirst({
+			where: { email: session?.user?.email as string },
+		}))
+		: false
 	return (
 		<html lang="en">
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 				<Theme>
 					{modal}
 					<div className="flex min-h-screen">
-						{isLoggedIn && (
+						{hasProfile && (
 							<DesktopNav />
 						)}
 						<div className="pb-24 lg:pb-4 px-4 md:px-8 pt-4 flex justify-around w-full">
@@ -48,7 +54,7 @@ export default async function RootLayout({
 							</div>
 						</div>
 					</div>
-					{isLoggedIn && (
+					{hasProfile && (
 						<MobileNav />
 					)}
 				</Theme>

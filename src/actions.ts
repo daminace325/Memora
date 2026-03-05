@@ -30,7 +30,7 @@ const profileSchema = z.object({
         .max(100, 'Name must be at most 100 characters'),
     subtitle: z.string().max(150, 'Subtitle must be at most 150 characters').optional().default(''),
     bio: z.string().max(500, 'Bio must be at most 500 characters').optional().default(''),
-    avatar: z.string().optional().default(''),
+    avatar: z.string().optional().default('/no-user.jpg'),
 })
 
 export async function updateProfile(data: FormData) {
@@ -283,4 +283,32 @@ export async function unbookmarkPost(postId: string) {
         }
     })
     revalidatePath('/')
+}
+
+
+const storySchema = z.object({
+    image: z.string().min(1, 'Image is required'),
+})
+
+export async function createStory(data: FormData) {
+    const sessionEmail = await getSessionEmailOrThrow()
+
+    const parsed = storySchema.safeParse({
+        image: data.get('image') as string,
+    })
+
+    if (!parsed.success) {
+        return { error: parsed.error.issues[0].message }
+    }
+
+    const story = await prisma.story.create({
+        data: {
+            author: sessionEmail,
+            image: parsed.data.image,
+            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours from now
+        }
+    })
+
+    revalidatePath('/')
+    return { error: null, storyId: story.id }
 }

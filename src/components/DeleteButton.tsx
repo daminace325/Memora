@@ -22,8 +22,8 @@ const DeleteButton = ({
                 
                 try {
                     await deletePost(post.id)
-                    router.push('/profile')
-                    router.refresh()
+                    router.back()
+                    setTimeout(() => router.push('/profile'), 100)
                 } catch (error) {
                     console.error('Error deleting post:', error)
                     setIsDeleting(false)

@@ -16,7 +16,7 @@ datasource db {
 model Profile {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   email    String  @unique
-  avatar   String?
+  avatar   String? @default("/no-user.jpg")
   username String? @unique
   name     String?
   subtitle String?
@@ -68,4 +68,12 @@ model Follower {
   createdAt             DateTime @default(now())
 
   @@unique([followingProfileId, followedProfileId])
+}
+
+model Story {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  author    String
+  image     String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
 }
