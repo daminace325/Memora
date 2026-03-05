@@ -26,7 +26,9 @@ export default function PostsGrid({posts}: {posts: Post[]}) {
                             height={500}
                             style={{
                                 width: '100%',
-                                height: 'auto'
+                                height: 'auto',
+                                maxHeight: '500px',
+                                objectFit: 'cover'
                             }} />
                     </Link>
                 ))}

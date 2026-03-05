@@ -28,12 +28,19 @@ export default function SinglePostContent({
     return (
         <div className="w-full">
             <div className="grid md:grid-cols-2 gap-4">
-                <div className="ml-auto w-full relative">
+                <div className="ml-auto w-full max-h-[600px] overflow-hidden flex items-center justify-center">
                     <Image
                         src={post.image}
                         alt={post.description || "Post image"}
-                        fill
+                        width={800}
+                        height={800}
                         className="rounded-lg object-contain"
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            maxHeight: '600px',
+                            objectFit: 'contain'
+                        }}
                         priority
                     />
                 </div>

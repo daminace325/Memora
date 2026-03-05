@@ -53,7 +53,7 @@ export default function CreateStoryPage() {
             <input type="hidden" name="image" value={imageUrl} />
             <div className="flex gap-4 flex-col">
                 <div>
-                    <div className="min-h-96 p-2 bg-gray-400 rounded-md relative">
+                    <div className="min-h-96 max-h-[500px] overflow-hidden p-2 bg-gray-400 rounded-md relative">
                         {imageUrl && (
                             <Image
                                 src={imageUrl}

@@ -35,7 +35,9 @@ export default function HighlightsGrid({ stories }: { stories: Story[] }) {
                             height={500}
                             style={{
                                 width: '100%',
-                                height: 'auto'
+                                height: 'auto',
+                                maxHeight: '500px',
+                                objectFit: 'cover'
                             }}
                         />
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 rounded-b-md opacity-0 group-hover:opacity-100 transition-opacity">

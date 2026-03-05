@@ -53,12 +53,13 @@ export default async function HomePosts({
                         className=""
                         key={post.id}>
                         <Link href={`/posts/${post.id}`}>
-                            <div className="w-full relative min-h-[350px] max-h-[600px] aspect-square bg-black">
+                            <div className="w-full relative bg-black max-h-[600px]">
                                 <Image
                                     src={post.image}
                                     alt={post.description || "Post image"}
-                                    fill
-                                    className="rounded-lg shadow-sm shadow-black/50 object-contain"
+                                    width={1000}
+                                    height={1000}
+                                    className="shadow-sm shadow-black/50 w-full h-auto max-h-[600px] object-contain"
                                 />
                             </div>
                         </Link>

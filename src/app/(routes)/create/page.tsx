@@ -45,7 +45,7 @@ export default function CreatePage() {
             <input type="hidden" name="image" value={imageUrl} />
             <div className="flex gap-4 flex-col">
                 <div>
-                    <div className="min-h-64 p-2 bg-gray-400 rounded-md relative">
+                    <div className="min-h-64 max-h-[500px] overflow-hidden p-2 bg-gray-400 rounded-md relative">
                         {imageUrl && (
                             <Image 
                                 src={imageUrl} 
@@ -55,7 +55,9 @@ export default function CreatePage() {
                                 height={400}
                                 style={{
                                     width: '100%',
-                                    height: 'auto'
+                                    height: 'auto',
+                                    maxHeight: '480px',
+                                    objectFit: 'contain'
                                 }}
                             />
                         )}
