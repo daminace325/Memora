@@ -31,6 +31,9 @@ model Post {
   likesCount  Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([author])
+  @@index([createdAt])
 }
 
 model Comment {
@@ -40,6 +43,8 @@ model Comment {
   text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([postId])
 }
 
 model Like {
@@ -49,6 +54,8 @@ model Like {
   createdAt DateTime @default(now())
 
   @@unique([postId, author])
+  @@index([postId])
+  @@index([author])
 }
 
 model Bookmark {
@@ -58,6 +65,8 @@ model Bookmark {
   createdAt DateTime @default(now())
 
   @@unique([postId, author])
+  @@index([postId])
+  @@index([author])
 }
 
 model Follower {
@@ -68,6 +77,8 @@ model Follower {
   createdAt             DateTime @default(now())
 
   @@unique([followingProfileId, followedProfileId])
+  @@index([followingProfileEmail])
+  @@index([followedProfileId])
 }
 
 model Story {
@@ -76,4 +87,6 @@ model Story {
   image     String
   createdAt DateTime @default(now())
   expiresAt DateTime
+
+  @@index([author, expiresAt])
 }
