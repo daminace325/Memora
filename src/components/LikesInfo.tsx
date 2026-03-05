@@ -17,23 +17,30 @@ export default function LikesInfo({
 }) {
     const router = useRouter()
     const [likedByMe, setLikedByMe] = useState(!!sessionLike)
+    const [isPending, setIsPending] = useState(false)
     return (
         <form
             action={async (data: FormData) => {
+                if (isPending) return
+                setIsPending(true)
                 setLikedByMe(prev => !prev)
-                if (likedByMe) {
-                    await removeLikeFromPost(data)
-                } else {
-                    //add like
-                    await likePost(data)
+                try {
+                    if (likedByMe) {
+                        await removeLikeFromPost(data)
+                    } else {
+                        await likePost(data)
+                    }
+                    router.refresh()
+                } finally {
+                    setIsPending(false)
                 }
-                router.refresh()
             }}
             className="flex items-center gap-2">
             <input type="hidden" name="postId" value={post.id} />
             <button
                 type="submit"
-                className="">
+                disabled={isPending}
+                className="disabled:opacity-50">
                 <HeartIcon className={likedByMe ? 'text-red-500 fill-red-500' : ''} />
             </button>
             {showText && (

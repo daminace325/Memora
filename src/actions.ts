@@ -109,11 +109,13 @@ async function updateLikesPostCount(postId: string) {
 
 export async function likePost(data: FormData) {
     const postId = data.get('postId') as string
-    await prisma.like.create({
-        data: {
-            author: await getSessionEmailOrThrow(),
-            postId,
-        }
+    const author = await getSessionEmailOrThrow()
+    await prisma.like.upsert({
+        where: {
+            postId_author: { postId, author },
+        },
+        create: { author, postId },
+        update: {},
     })
     await updateLikesPostCount(postId)
     revalidatePath('/')
