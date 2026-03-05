@@ -59,7 +59,8 @@ export async function updateProfile(data: FormData) {
             ...newUserInfo
         }
     })
-    revalidatePath('/')
+    revalidatePath('/profile')
+    revalidatePath('/settings')
     return { error: null }
 }
 
@@ -90,7 +91,8 @@ export async function postComment(data: FormData) {
             text: data.get('text') as string,
         },
     })
-    revalidatePath('/')
+    const postId = data.get('postId') as string
+    revalidatePath(`/posts/${postId}`)
     return comment
 }
 
@@ -121,7 +123,7 @@ export async function likePost(data: FormData) {
         update: {},
     })
     await updateLikesPostCount(postId)
-    revalidatePath('/')
+    revalidatePath(`/posts/${postId}`)
 }
 
 
@@ -134,7 +136,7 @@ export async function removeLikeFromPost(data: FormData) {
         }
     })
     await updateLikesPostCount(postId)
-    revalidatePath('/')
+    revalidatePath(`/posts/${postId}`)
 }
 
 
@@ -212,7 +214,7 @@ export async function deletePost(postId: string) {
     await prisma.post.delete({
         where: { id: postId },
     });
-    revalidatePath('/')
+    revalidatePath('/', 'layout')
 }
 
 
@@ -230,7 +232,7 @@ export async function followProfile(profileIdToFollow: string) {
             followedProfileId: profileIdToFollow,
         }
     })
-    revalidatePath('/')
+    revalidatePath('/', 'layout')
 }
 
 
@@ -248,7 +250,7 @@ export async function unfollowProfile(profileIdToFollow: string) {
             followedProfileId: profileIdToFollow  // The profile to unfollow
         }
     });
-    revalidatePath('/')
+    revalidatePath('/', 'layout')
 }
 
 
@@ -260,7 +262,7 @@ export async function bookmarkPost(postId: string) {
             postId,
         }
     })
-    revalidatePath('/')
+    revalidatePath('/profile/bookmarked')
 }
 
 
@@ -273,7 +275,7 @@ export async function unbookmarkPost(postId: string) {
             postId,
         }
     })
-    revalidatePath('/')
+    revalidatePath('/profile/bookmarked')
 }
 
 
@@ -300,7 +302,7 @@ export async function createStory(data: FormData) {
         }
     })
 
-    revalidatePath('/')
+    revalidatePath('/', 'page')
     return { error: null, storyId: story.id }
 }
 
@@ -324,5 +326,5 @@ export async function deleteStory(storyId: string) {
         },
     });
 
-    revalidatePath('/');
+    revalidatePath('/', 'page');
 }
